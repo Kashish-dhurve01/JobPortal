@@ -1,7 +1,7 @@
 import React from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
-import { Avatar, AvatarImage } from '../ui/avatar'
+import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
 import { LogOut, User2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,6 +27,11 @@ const Navbar = () => {
             console.log(error);
             toast.error(error.response.data.message);
         }
+    }
+    // Function to get user initials
+    const getUserInitials = (user) => {
+        const name = user?.fullName || user?.fullname || 'User';
+        return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
     }
     return (
         <div className='bg-white'>
@@ -63,14 +68,26 @@ const Navbar = () => {
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <Avatar className="cursor-pointer">
-                                        <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" />
+                                        <AvatarImage 
+                                            src={user?.profile?.profilePhoto} 
+                                            alt={user?.fullName || user?.fullname || "User"} 
+                                        />
+                                        <AvatarFallback className="bg-[#6A38C2] text-white font-semibold">
+                                            {getUserInitials(user)}
+                                        </AvatarFallback>
                                     </Avatar>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-80">
                                     <div className=''>
                                         <div className='flex gap-2 space-y-2'>
                                             <Avatar className="cursor-pointer">
-                                                <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" />
+                                                <AvatarImage 
+                                                    src={user?.profile?.profilePhoto} 
+                                                    alt={user?.fullName || user?.fullname || "User"} 
+                                                />
+                                                <AvatarFallback className="bg-[#6A38C2] text-white font-semibold">
+                                                    {getUserInitials(user)}
+                                                </AvatarFallback>
                                             </Avatar>
                                             <div>
                                                 <h4 className='font-medium'>{user?.fullname}</h4>
